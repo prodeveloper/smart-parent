@@ -22,7 +22,7 @@ Thursday 5 September Pupil photos """
         {'event': 'Local Authority’s secondary event', 'date': '12 September'}, 
         {'event': 'Pupil photos', 'date': 'Thursday 5 September'}]
     
-    capture_info = CaptureInfo(UploadedContent(content_id="test_capture_info", content=content))
+    capture_info = CaptureInfo(uploaded_content=UploadedContent(content_id="test_capture_info", content=content))
     asyncio.run(capture_info.execute())
     assert capture_info.executed == True
     assert capture_info.parsed_events == expected_output

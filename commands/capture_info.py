@@ -2,17 +2,10 @@ from data_types.uploaded import UploadedContent
 from models.local_firebase import FirebaseCache
 from services.integrations import GeminiModel
 from config import ConfigLoader
+from commands.log_item import LogItem
 import json
 import re
-import logging
 
-logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler('debug.log')
-file_handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
-logger.setLevel(logging.DEBUG)
 
 class CaptureInfo:
     """
@@ -22,7 +15,7 @@ class CaptureInfo:
     prompt: str
     parsed_events: list[dict]
     executed: bool = False
-    def __init__(self, uploaded_content):
+    def __init__(self, *, uploaded_content: UploadedContent):
         self.uploaded_content = uploaded_content
         self.prompt = self._get_prompt()
 
@@ -34,12 +27,13 @@ class CaptureInfo:
         parsed = FirebaseCache().get(self.uploaded_content.content_id)
         if parsed is None:
             parsed = await self._gemini_parse_events()
+            LogItem(f"No events found for {self.uploaded_content.content_id} using Gemini").log()
             FirebaseCache().set(self.uploaded_content.content_id, parsed)
         try:
             self.parsed_events = self._clean_parsed_events(parsed)
-            logger.info(self.parsed_events)
+            LogItem(self.parsed_events).log()
         except json.JSONDecodeError:
-            logger.error(f"Failed to parse events: {parsed}")
+            LogItem(f"Failed to parse events: {parsed}").log()
             raise ValueError("Failed to parse events")
         
     def _clean_parsed_events(self, parsed):
