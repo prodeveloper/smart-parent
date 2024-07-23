@@ -69,6 +69,8 @@ class CaptureInfo:
         {'event': 'event name', 'date': 'date'},
         {'event': 'event name', 'date': 'date'}
     ]
+
+    Give a full date. Incase a year is not present use: 2024, if month or date not available use the first day/month respectively. Date should be dd/mm/yyyy
     Please include nothing else in your response. If you can't find the information, return an empty list.:
     """ + self.uploaded_content.content
 
