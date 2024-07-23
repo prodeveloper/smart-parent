@@ -1,0 +1,13 @@
+.env
+files/*
+keys/*
+*.pyc
+*.venv
+*.pytest_cache
+*.mypy_cache
+*.mypy_buckets
+*.pdf
+DS_Store
+.DS_Store  
+config.ini
+.vscode/*

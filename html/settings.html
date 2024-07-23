@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Info App - Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Settings</h1>
+        <form>
+            <h2 class="h4 mb-3">Sync Options</h2>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="syncGoogle" checked>
+                <label class="form-check-label" for="syncGoogle">Sync with Google Calendar</label>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="syncApple">
+                <label class="form-check-label" for="syncApple">Sync with Apple Calendar</label>
+            </div>
+
+            <h2 class="h4 mb-3 mt-4">Notifications</h2>
+            <div class="mb-3">
+                <label for="notificationTime" class="form-label">Remind me before event</label>
+                <select class="form-select" id="notificationTime">
+                    <option>15 minutes</option>
+                    <option>30 minutes</option>
+                    <option selected>1 hour</option>
+                    <option>1 day</option>
+                </select>
+            </div>
+
+            <h2 class="h4 mb-3 mt-4">AI Processing</h2>
+            <div class="mb-3">
+                <label for="aiDetailLevel" class="form-label">AI Detail Extraction Level</label>
+                <select class="form-select" id="aiDetailLevel">
+                    <option>Basic</option>
+                    <option selected>Standard</option>
+                    <option>Detailed</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Save Settings</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
