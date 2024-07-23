@@ -1,0 +1,10 @@
+2024-07-23 15:21:46,340 - commands.capture_info - ERROR - Failed to parse events: [
+    {'event': 'PUPILS RETURN TO SCHOOL Be Proud Week', 'date': 'Tuesday 3 September'},
+    {'event': 'SUFFOLKS CLOSED - INSET DAY - NO TEA-TIME CLUB', 'date': 'Tuesday 3 September'},
+    {'event': 'Year 6 parent/carer SATs/Secondary School meeting', 'date': 'Wednesday 4 September'},
+    {'event': 'Local Authority’s secondary event', 'date': '12 September'},
+    {'event': 'Pupil photos', 'date': 'Thursday 5 September'}
+]
+
+2024-07-23 15:26:10,143 - commands.capture_info - INFO - [{'event': 'PUPILS RETURN TO SCHOOL Be Proud Week', 'date': 'Tuesday 3 September'}, {'event': 'SUFFOLKS CLOSED - INSET DAY - NO TEA-TIME CLUB', 'date': 'Tuesday 3 September'}, {'event': 'Year 6 parent/carer SATs/Secondary School meeting', 'date': 'Wednesday 4 September'}, {'event': 'Local Authority’s secondary event', 'date': '12 September'}, {'event': 'Pupil photos', 'date': 'Thursday 5 September'}]
+2024-07-23 15:27:12,750 - commands.capture_info - INFO - [{'event': 'PUPILS RETURN TO SCHOOL Be Proud Week', 'date': 'Tuesday 3 September'}, {'event': 'SUFFOLKS CLOSED - INSET DAY - NO TEA-TIME CLUB', 'date': 'Tuesday 3 September'}, {'event': 'Year 6 parent/carer SATs/Secondary School meeting', 'date': 'Wednesday 4 September'}, {'event': 'Local Authority’s secondary event', 'date': '12 September'}, {'event': 'Pupil photos', 'date': 'Thursday 5 September'}]

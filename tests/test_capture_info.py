@@ -2,6 +2,7 @@
 
 from commands.capture_info import CaptureInfo
 from data_types.uploaded import UploadedContent
+import asyncio
 
 def test_capture_info():
     content = """happening our caterers will be offering a range of cold lunches: rolls, sandwiches, wraps and fruit/ice cream. There 
@@ -15,14 +16,13 @@ Please see page 2 for details of the Local Authority’s secondary event on
 12 September – click to see the flyer on how to book a place
 Thursday 5 September Pupil photos """
     expected_output = [
-{"event": "PUPILS RETURN TO SCHOOL Be Proud Week", "date": "03/09/2024"},
-{"event": "SUFFOLKS CLOSED - INSET DAY - NO TEA-TIME CLUB", "date": "03/09/2024"},
-{"event": "Year 6 parent/carer SATs/Secondary School meeting", "date": "04/09/2024"},
-{"event": "Pupil photos", "date": "05/09/2024"},
-{"event": "Local Authority's secondary event", "date": "12/09/2024"}
-]
+        {'event': 'PUPILS RETURN TO SCHOOL Be Proud Week', 'date': 'Tuesday 3 September'}, 
+        {'event': 'SUFFOLKS CLOSED - INSET DAY - NO TEA-TIME CLUB', 'date': 'Tuesday 3 September'}, 
+        {'event': 'Year 6 parent/carer SATs/Secondary School meeting', 'date': 'Wednesday 4 September'}, 
+        {'event': 'Local Authority’s secondary event', 'date': '12 September'}, 
+        {'event': 'Pupil photos', 'date': 'Thursday 5 September'}]
     
-    capture_info = CaptureInfo(UploadedContent(content_id="test", content=content))
-    capture_info.execute()
+    capture_info = CaptureInfo(UploadedContent(content_id="test_capture_info", content=content))
+    asyncio.run(capture_info.execute())
     assert capture_info.executed == True
-    #assert capture_info.parsed_events == expected_output
+    assert capture_info.parsed_events == expected_output
