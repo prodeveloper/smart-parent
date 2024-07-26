@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-e8kn@*dx^t9pbf6+wc%bgb#ul7r7r*-#(jlm)s5xbib*63*qd7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['smart-parent-7wv3ucm4xa-uc.a.run.app']
+CSRF_TRUSTED_ORIGINS = ['https://smart-parent-7wv3ucm4xa-uc.a.run.app']
 
 # Application definition
 
