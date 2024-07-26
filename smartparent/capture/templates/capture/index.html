@@ -6,9 +6,11 @@
 <div class="container mt-4">
     <h1 class="mb-4">Capture Information</h1>
     <div class="mb-3">
-        <button class="btn btn-info">
-            <i class="bi bi-file-earmark"></i> Upload File
-        </button>
+        <form method="post" enctype="multipart/form-data" action="{% url 'capture:process_pdf_upload' %}">
+            {% csrf_token %}
+            <input type="file" name="pdf_file" accept=".pdf">
+            <button type="submit">Upload PDF</button>
+        </form>
     </div>
     <form action="{% url 'capture:process_text_info' %}" method="post">
         {% csrf_token %}
