@@ -7,17 +7,23 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Event Details</h1>
     </div>
-    <div class="row">
-        {% for event in events %}
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">{{ event.event }}</h3>
-                    <p class="card-text"><i class="fas fa-calendar-alt"></i> {{ event.date }}</p>
+    {% if events %}
+        <div class="row">
+            {% for event in events %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ event.event }}</h3>
+                        <p class="card-text"><i class="fas fa-calendar-alt"></i> {{ event.date }}</p>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            Sorry, we couldn't parse any events.
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
