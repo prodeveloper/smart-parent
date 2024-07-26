@@ -1,8 +1,8 @@
-from data_types.uploaded import UploadedContent
-from models.local_firebase import FirebaseCache
-from services.integrations import GeminiModel
-from config import ConfigLoader
-from commands.log_item import LogItem
+from capture.data_types.uploaded import UploadedContent
+from capture.models.local_firebase import FirebaseCache
+from capture.services.integrations import GeminiModel
+from smartparent.config import ConfigLoader
+from capture.commands.log_item import LogItem
 import json
 import re
 

@@ -1,5 +1,5 @@
-from commands.capture_info import CaptureInfo
-from data_types.uploaded import UploadedContent
+from capture.commands.capture_info import CaptureInfo
+from capture.data_types.uploaded import UploadedContent
 from pypdf import PdfReader
 from hashlib import md5
 import os

@@ -2,10 +2,10 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-from config import ConfigLoader
-from services.interfaces import LLMModel
+from smartparent.config import ConfigLoader
+from capture.services.interfaces import LLMModel
 import google.generativeai as genai
-from services.validators import PostFlightValidator
+from capture.services.validators import PostFlightValidator
 
 class FirebaseIntegration:
     def __init__(self):

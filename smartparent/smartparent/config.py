@@ -7,7 +7,7 @@ class ConfigLoader:
     @property
     def configs(self):
         config = configparser.ConfigParser()
-        config.read('config.ini') 
+        config.read('../config.ini') 
         Config = namedtuple('Config', ['GEMINI_API_KEY', 'FIREBASE_SERVICE_ACCOUNT', 'LOCAL_PASSWORD', 'GOOGLE_APPLICATION_CREDENTIALS'])
         # Prioritize environment variables set in Cloud Run
         GEMINI_API_KEY = os.environ.get('gemini') if os.environ.get('gemini') else config.get('GEMINI', 'GEMINI_API_KEY', fallback=None)

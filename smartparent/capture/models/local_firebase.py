@@ -1,5 +1,5 @@
-from services.interfaces import ICache
-from services.integrations import FirebaseIntegration
+from capture.services.interfaces import ICache
+from capture.services.integrations import FirebaseIntegration
 from pydantic import BaseModel
 
 class FirebaseCache(ICache):
