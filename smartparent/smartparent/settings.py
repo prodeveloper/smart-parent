@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-e8kn@*dx^t9pbf6+wc%bgb#ul7r7r*-#(jlm)s5xbib*63*qd7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['smart-parent-7wv3ucm4xa-uc.a.run.app']
-CSRF_TRUSTED_ORIGINS = ['https://smart-parent-7wv3ucm4xa-uc.a.run.app']
+ALLOWED_HOSTS = ['smart-parent-7wv3ucm4xa-uc.a.run.app', 'localhost', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://smart-parent-7wv3ucm4xa-uc.a.run.app', 'http://localhost:8000', 'http://127.0.0.1:8000']
 
 # Application definition
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'capture.apps.CaptureConfig',
+    'home.apps.HomeConfig',
 ]
 
 MIDDLEWARE = [
