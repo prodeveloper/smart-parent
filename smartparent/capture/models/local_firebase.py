@@ -1,6 +1,7 @@
 from capture.services.interfaces import ICache
 from capture.services.integrations import FirebaseIntegration
 from pydantic import BaseModel
+from typing import Union
 
 class FirebaseCache(ICache):
     def __init__(self):
@@ -27,4 +28,4 @@ class FirebaseCache(ICache):
 class CacheKey(BaseModel):
     key: str
 class CacheValue(BaseModel):
-    value: str
+    value: Union[str,int]

@@ -27,3 +27,15 @@ class ConfigLoader:
         default_prompt = "Explain this to me maximum 5 bullet points as simply as possible. Use metaphors and analogies to explain the concepts."
         prompt = os.environ.get('prompt') if os.environ.get('prompt') else default_prompt
         return prompt
+    def max_tokens(self):
+        default_max_tokens = 1000
+        max_tokens = os.environ.get('max_tokens') if os.environ.get('max_tokens') else default_max_tokens
+        return max_tokens
+    def max_text_length(self):
+        default_max_text_length = 1000
+        max_text_length = os.environ.get('max_text_length') if os.environ.get('max_text_length') else default_max_text_length
+        return max_text_length
+    def max_times_run_today(self):
+        default_max_times_run_today = 20
+        max_times_run_today = os.environ.get('max_times_run_today') if os.environ.get('max_times_run_today') else default_max_times_run_today
+        return max_times_run_today
