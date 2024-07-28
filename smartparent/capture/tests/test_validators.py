@@ -1,9 +1,12 @@
-from capture.services.validators import PreFlightValidator, TextLengthError, KeyError
+from capture.services.validators import PreFlightValidator, TextLengthError, GeminiKeyError
 import pytest
 from django.test import TestCase
 from capture.commands.enforce_limits import EnforceLimitsCommand, TextTooLongException,TooManyTimesRunTodayException, CheckLimitsCommand
 
 class TestValidators(TestCase):
+    """
+    Test the validators.
+    """
     def test_text_length(self):
         validator = PreFlightValidator()
         validator.text_length("This is a test")
@@ -14,7 +17,7 @@ class TestValidators(TestCase):
     def test_invalid_key(self):
         validator = PreFlightValidator()
         key = "some randon key"
-        with pytest.raises(KeyError):
+        with pytest.raises(GeminiKeyError):
             validator.key_error(key)
     def test_enforce_limits(self):
         text = "This is a test"*10000

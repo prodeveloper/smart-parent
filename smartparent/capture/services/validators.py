@@ -10,7 +10,7 @@ class PreFlightValidator:
             raise TextLengthError("Text length is too long")
     def key_error(self, key: str) -> None:
         if not key or len(key) < 5 or not key.isalnum() or ' ' in key:
-            raise KeyError("Key must be at least 5 characters long, all alphanumeric, and contain no spaces")
+            raise GeminiKeyError("Key must be at least 5 characters long, all alphanumeric, and contain no spaces")
     @staticmethod
     def file_exists(file_path: str) -> None:
         if not os.path.exists(file_path):
@@ -40,7 +40,7 @@ class TextLengthError(SmartParentError):
         self.message = message
         super().__init__(self.message)
 
-class KeyError(SmartParentError):
+class GeminiKeyError(SmartParentError):
     def __init__(self, message):
         self.message = message
         super().__init__(self.message)
