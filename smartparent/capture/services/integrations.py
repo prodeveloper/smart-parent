@@ -1,4 +1,3 @@
-
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -12,7 +11,9 @@ class FirebaseIntegration:
         self.db = None
 
     def setup(self):
-        # Check if the app is already initialized. This fails if the app is not initialized. or if you try to initialize it twice. 
+        #Check if the app is already initialized.
+        # This fails if the app is not initialized.
+        # or if you try to initialize it twice.
         if not firebase_admin._apps:
             cred = credentials.Certificate(ConfigLoader().configs.FIREBASE_SERVICE_ACCOUNT)
             firebase_admin.initialize_app(cred)
@@ -35,8 +36,8 @@ class GeminiModel(LLMModel):
         self.gemini_model = gemini_model
         self.setup()
     def setup(self) -> None:
-         genai.configure(api_key=self.gemini_key)
-         self.model = genai.GenerativeModel(self.gemini_model)
+        genai.configure(api_key=self.gemini_key)
+        self.model = genai.GenerativeModel(self.gemini_model)
 
     def prompt(self, prompt):
         response = self.model.generate_content(prompt)

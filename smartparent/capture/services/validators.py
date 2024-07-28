@@ -1,11 +1,12 @@
 import os
 from pypdf import PdfReader
+from smartparent.config import ConfigLoader
 
 
 
 class PreFlightValidator:
     def text_length(self,text:str)->None:
-        if len(text) > 10000:
+        if len(text) > ConfigLoader().max_text_length():
             raise TextLengthError("Text length is too long")
     def key_error(self, key: str) -> None:
         if not key or len(key) < 5 or not key.isalnum() or ' ' in key:

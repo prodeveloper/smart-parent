@@ -31,8 +31,9 @@ class ConfigLoader:
         default_max_tokens = 1000
         max_tokens = os.environ.get('max_tokens') if os.environ.get('max_tokens') else default_max_tokens
         return max_tokens
+    
     def max_text_length(self):
-        default_max_text_length = 1000
+        default_max_text_length = 10000
         max_text_length = os.environ.get('max_text_length') if os.environ.get('max_text_length') else default_max_text_length
         return max_text_length
     def max_times_run_today(self):
