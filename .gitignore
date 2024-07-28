@@ -12,6 +12,8 @@ DS_Store
 config.ini
 .vscode/*
 debug.log
+smartparent/debug.log
 sample_pdfs/*
 db.sqlite3
 deploy_google.sh
+scripts/*

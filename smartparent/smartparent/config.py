@@ -6,10 +6,18 @@ import json
 class ConfigLoader:
     """Loads and manages configuration settings for the application."""
     database_config = namedtuple('DatabaseConfig', [
-            'PUBLIC_IP_ADDRESS', 'DATABASE_NAME', 'USER', 'PASSWORD'
+            'PUBLIC_IP_ADDRESS', 
+            'DB_NAME', 
+            'DB_USER', 
+            'DB_PASSWORD',
+            'IS_PRIVATE',
+            'INSTANCE_CONNECTION_NAME'
         ])
     gemini_config = namedtuple('Config', [
-            'GEMINI_API_KEY', 'FIREBASE_SERVICE_ACCOUNT', 'LOCAL_PASSWORD', 'GOOGLE_APPLICATION_CREDENTIALS'
+            'GEMINI_API_KEY', 
+            'FIREBASE_SERVICE_ACCOUNT', 
+            'LOCAL_PASSWORD', 
+            'GOOGLE_APPLICATION_CREDENTIALS'
         ])
 
     def __init__(self):
@@ -42,28 +50,14 @@ class ConfigLoader:
 
 
         return self.gemini_config
+
     def _db_configs(self):
         config = configparser.ConfigParser()
         config.read('../config.ini')
-        self.database_config = namedtuple('DatabaseConfig', [
-            'PUBLIC_IP_ADDRESS', 'DATABASE_NAME', 'USER', 'PASSWORD'
-        ])
-        self.database_config.PUBLIC_IP_ADDRESS = (
-            os.environ.get('PUBLIC_IP_ADDRESS') or
-            config.get('DATABASE', 'PUBLIC_IP_ADDRESS', fallback=None)
-        )
-        self.database_config.DATABASE_NAME = (
-            os.environ.get('DATABASE_NAME') or
-            config.get('DATABASE', 'DATABASE_NAME', fallback=None)
-        )
-        self.database_config.USER = (
-            os.environ.get('USER') or
-            config.get('DATABASE', 'USER', fallback=None)
-        )
-        self.database_config.PASSWORD = (
-            os.environ.get('PASSWORD') or
-            config.get('DATABASE', 'PASSWORD', fallback=None)
-        )
+        for field in self.database_config._fields:
+            setattr(self.database_config, field, 
+                    os.environ.get(field) or 
+                    config.get('DATABASE', field, fallback=None))
 
     def max_text_length(self):
         default_max_text_length = 10000
@@ -72,6 +66,7 @@ class ConfigLoader:
             default_max_text_length
         )
         return max_text_length
+
     def max_times_run_today(self):
         default_max_times_run_today = 20
         max_times_run_today = (
