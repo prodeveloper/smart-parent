@@ -6,12 +6,13 @@ import json
 class ConfigLoader:
     """Loads and manages configuration settings for the application."""
     database_config = namedtuple('DatabaseConfig', [
-            'PUBLIC_IP_ADDRESS', 
+            'DB_HOST', 
             'DB_NAME', 
             'DB_USER', 
             'DB_PASSWORD',
             'IS_PRIVATE',
-            'INSTANCE_CONNECTION_NAME'
+            'INSTANCE_CONNECTION_NAME',
+            'DB_PORT'
         ])
     gemini_config = namedtuple('Config', [
             'GEMINI_API_KEY', 

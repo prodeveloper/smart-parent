@@ -3,12 +3,37 @@ from unittest import TestCase
 from google.cloud.sql.connector import Connector, IPTypes
 import sqlalchemy
 import pg8000
+from django.conf import settings
+from django.db import connections
 from smartparent.config import ConfigLoader
+from capture.commands.log_item import LogItem
+
 
 class TestCloudSql(TestCase):
+
     """
-    Tests the Cloud SQL connection.
+    Tests the Cloud SQL connection using Django's database configuration.
     """
+
+    def test_django_db_connection(self):
+        """
+        Tests the connection to Cloud SQL using Django's database configuration.
+        """
+        # Ensure the database is configured in Django settings
+        self.assertIn('google_cloud', settings.DATABASES)
+
+        # Get the default database connection
+        connection = connections['google_cloud']
+        assert connection is not None
+
+        # Attempt to connect and execute a simple query
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            result = cursor.fetchone()
+
+        # Assert that the query returned the expected result
+        self.assertEqual(result[0], 1)
+
     def test_connect_with_connector(self) -> sqlalchemy.engine.base.Engine:
         """
         Initializes a connection pool for a Cloud SQL instance of PostgreSQL.
