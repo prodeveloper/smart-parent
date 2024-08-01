@@ -6,7 +6,7 @@ from smartparent.config import ConfigLoader
 
 class PreFlightValidator:
     def text_length(self,text:str)->None:
-        if len(text) > ConfigLoader().max_text_length():
+        if len(text) > ConfigLoader().throttle_config.MAX_TEXT_LENGTH:
             raise TextLengthError("Text length is too long")
     def key_error(self, key: str) -> None:
         if not key or len(key) < 5 or not key.isalnum() or ' ' in key:

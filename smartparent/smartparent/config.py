@@ -23,10 +23,15 @@ class ConfigLoader:
     test_config = namedtuple('TestConfig', [
             'GEMINI_TEST'
         ])
+    throttle_config = namedtuple('ThrottleConfig', [
+            'MAX_TEXT_LENGTH',
+            'MAX_TIMES_PER_DAY'
+        ])
 
     def __init__(self):
         self._db_configs()
         self._test_configs()
+        self._throttle_configs()
 
     @property
     def configs(self):
@@ -70,20 +75,10 @@ class ConfigLoader:
             setattr(self.test_config, field,
                     os.environ.get(field) or
                     config.get('TEST', field, fallback=None))
-
-    def max_text_length(self):
-        """Retrieve the maximum text length for the application."""
-        default_max_text_length = 10000
-        max_text_length = (
-            os.environ.get('max_text_length') or
-            default_max_text_length
-        )
-        return max_text_length
-
-    def max_times_run_today(self):
-        default_max_times_run_today = 20
-        max_times_run_today = (
-            os.environ.get('max_times_run_today') or
-            default_max_times_run_today
-        )
-        return max_times_run_today
+    def _throttle_configs(self):
+        config = configparser.ConfigParser()
+        config.read('../config.ini')
+        for field in self.throttle_config._fields:
+            setattr(self.throttle_config, field,
+                    int(os.environ.get(field) or
+                    config.get('THROTTLE', field, fallback=None)))

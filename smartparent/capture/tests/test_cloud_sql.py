@@ -3,9 +3,13 @@ from unittest import TestCase
 from google.cloud.sql.connector import Connector, IPTypes
 import sqlalchemy
 import pg8000
+import pexpect
+import sys
 from django.conf import settings
 from django.db import connections
 from smartparent.config import ConfigLoader
+from capture.commands.log_item import LogItem
+
 
 
 class TestCloudSql(TestCase):
@@ -31,7 +35,27 @@ class TestCloudSql(TestCase):
             result = cursor.fetchone()
 
         # Assert that the query returned the expected result
+        LogItem(result).log()
         self.assertEqual(result[0], 1)
+    
+    def test_cloud_connection(self):
+        database_config = ConfigLoader().database_config
+        child = pexpect.spawn(
+            f"psql -h {database_config.DB_HOST} "
+            f"-U {database_config.DB_USER} "
+            f"-d {database_config.DB_NAME}"
+        )
+        try:
+            child.expect(f"Password for user {database_config.DB_USER}:")
+            child.sendline(database_config.DB_PASSWORD)
+            child.expect(f"{database_config.DB_NAME}=>")
+            child.sendline("SELECT 1;")
+            child.expect(f"{database_config.DB_NAME}=>")
+            child.sendline("\\q")
+        except pexpect.TIMEOUT as exc:
+            raise FailedToConnect("Failed to connect to the database") from exc
+        finally:
+            child.close()
 
     def test_connect_with_connector(self) -> sqlalchemy.engine.base.Engine:
         """
@@ -71,3 +95,9 @@ class TestCloudSql(TestCase):
         with pool.connect() as conn:
             result = conn.execute(sqlalchemy.text("SELECT 1"))
             assert result.scalar() == 1
+
+class FailedToConnect(Exception):
+    """
+    Raised when the connection to the database fails.
+    """
+    pass

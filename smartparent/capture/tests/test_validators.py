@@ -2,7 +2,7 @@ from capture.services.validators import PreFlightValidator, TextLengthError, Gem
 import pytest
 from django.test import TestCase
 from capture.commands.enforce_limits import EnforceLimitsCommand, TextTooLongException,TooManyTimesRunTodayException, CheckLimitsCommand
-
+from smartparent.config import ConfigLoader
 class TestValidators(TestCase):
     """
     Test the validators.
@@ -27,11 +27,11 @@ class TestValidators(TestCase):
     def test_too_many_times_run(self):
         text = "This is a test"
         enforce_limits_command = EnforceLimitsCommand(text)
-        enforce_limits_command.text_no_times_run_today = CheckLimitsCommand().get(key="too_many_times")
+        enforce_limits_command.text_no_times_run_today = ConfigLoader().throttle_config.MAX_TIMES_PER_DAY
         with pytest.raises(TooManyTimesRunTodayException):
             enforce_limits_command.run()
         within_limits_command = EnforceLimitsCommand(text)
-        within_limits_command.text_no_times_run_today = CheckLimitsCommand().get(key="enough_times")
+        within_limits_command.text_no_times_run_today = ConfigLoader().throttle_config.MAX_TIMES_PER_DAY - 1
         within_limits_command.run()
 
 

@@ -88,8 +88,7 @@ DATABASES = {
         'USER': DBConfig.DB_USER,
         'PASSWORD': DBConfig.DB_PASSWORD,
         'PORT': DBConfig.DB_PORT,
-        'HOST': 'localhost'
-
+        'HOST': DBConfig.DB_HOST,
     }
 }
 
