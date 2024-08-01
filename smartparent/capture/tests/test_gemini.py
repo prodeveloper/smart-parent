@@ -19,16 +19,23 @@ class Candidate:
         self.safety_ratings = safety_ratings
 
 class TestGemini(TestCase):
+    """Test the GeminiModel class"""
     def test_gemini_prompt(self):
+        """Test the prompt to gemini returns what is expected"""
         gemini_key = ConfigLoader().configs.GEMINI_API_KEY
-        #TODO figure a way to pass flag here to reduce the number of tokens used in tests
-        assert gemini_key is not None
-        
+        if ConfigLoader().test_config.GEMINI_TEST == "False":
+            #We check if we are actually going to run the token consuming test"
+            assert True
+            return
         model = GeminiModel(gemini_key)
-        output = model.prompt('This is part of a unit test, reply using smallest amount of token and ensure you say "Yes I am live"')
-        output = "Yes I am live"
+        output = model.prompt(
+            """This is part of a unit test, 
+            reply using smallest amount of token and ensure you say 'Yes I am live'
+            """
+            )
         assert 'Yes I am live' in output
     def test_safety_ratings(self):
+        """Test the safety ratings"""
         candidates = [
             Candidate(
                 text="Yes, I am live \n",
@@ -44,9 +51,3 @@ class TestGemini(TestCase):
             )
         ]
         PostFlightValidator.check_safety_ratings(candidates[0].safety_ratings)
-
-
-
-def test_main_call():
-    pass
-    #TODO: Stopped here for the day, next step is to test the main call with pdfs

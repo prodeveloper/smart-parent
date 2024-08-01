@@ -20,9 +20,13 @@ class ConfigLoader:
             'LOCAL_PASSWORD', 
             'GOOGLE_APPLICATION_CREDENTIALS'
         ])
+    test_config = namedtuple('TestConfig', [
+            'GEMINI_TEST'
+        ])
 
     def __init__(self):
         self._db_configs()
+        self._test_configs()
 
     @property
     def configs(self):
@@ -56,11 +60,19 @@ class ConfigLoader:
         config = configparser.ConfigParser()
         config.read('../config.ini')
         for field in self.database_config._fields:
-            setattr(self.database_config, field, 
-                    os.environ.get(field) or 
+            setattr(self.database_config, field,
+                    os.environ.get(field) or
                     config.get('DATABASE', field, fallback=None))
+    def _test_configs(self):
+        config = configparser.ConfigParser()
+        config.read('../config.ini')
+        for field in self.test_config._fields:
+            setattr(self.test_config, field,
+                    os.environ.get(field) or
+                    config.get('TEST', field, fallback=None))
 
     def max_text_length(self):
+        """Retrieve the maximum text length for the application."""
         default_max_text_length = 10000
         max_text_length = (
             os.environ.get('max_text_length') or

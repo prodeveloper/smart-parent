@@ -6,7 +6,6 @@ import pg8000
 from django.conf import settings
 from django.db import connections
 from smartparent.config import ConfigLoader
-from capture.commands.log_item import LogItem
 
 
 class TestCloudSql(TestCase):
