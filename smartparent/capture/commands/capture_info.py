@@ -1,10 +1,13 @@
+import json
+import re
+from datetime import datetime
+from hashlib import md5
 from capture.data_types.uploaded import UploadedContent
 from capture.models.local_firebase import FirebaseCache
 from capture.services.integrations import GeminiModel
 from smartparent.config import ConfigLoader
 from capture.commands.log_item import LogItem
-import json
-import re
+
 
 
 class CaptureInfo:
@@ -20,9 +23,15 @@ class CaptureInfo:
         self.prompt = self._get_prompt()
 
     async def execute(self):
+        self._gen_content_id()
         await self._parse_events()
         self.executed = True
-        
+        LogItem(f"Parsed events: {self.parsed_events}").log()
+    
+    def _gen_content_id(self):
+        full_content = self.prompt+self.uploaded_content.content
+        self.uploaded_content.content_id = md5(full_content.encode('utf-8')).hexdigest()
+    
     async def _parse_events(self):
         parsed = FirebaseCache().get(self.uploaded_content.content_id)
         if parsed is None:
@@ -32,9 +41,9 @@ class CaptureInfo:
         try:
             self.parsed_events = self._clean_parsed_events(parsed)
             LogItem(self.parsed_events).log()
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as exc:
             LogItem(f"Failed to parse events: {parsed}").log()
-            raise ValueError("Failed to parse events")
+            raise ValueError("Failed to parse events") from exc
         
     def _clean_parsed_events(self, parsed):
         data = re.sub(r"'", r'"', parsed)
@@ -52,20 +61,31 @@ class CaptureInfo:
         return self.__dict__.get(name)
     
     def _get_prompt(self):
-        return """From the text below please extract the following information event and date. 
+        default_year = datetime.now().year
+        default_month = datetime.now().month
+        default_day = datetime.now().day
+        default_hour = default_minute = 0
+        
+        prompt = f"""From the text below please extract the following information event and date. 
         Give response as JSON for example.
-    [{
+    [{{
         'event': 'event name',
-        'date': 'date'
-    }]
+        'description': 'event description',
+        'date_time': 'date and time'
+    }}]
     In case of multiple events, return a list of events and dates. eg
     [
-        {'event': 'event name', 'date': 'date'},
-        {'event': 'event name', 'date': 'date'}
+        {{'event': 'event name', 'description': 'event description', 'date_time': 'date and time'}},
+        {{'event': 'event name', 'description': 'event description', 'date_time': 'date and time'}}
     ]
 
-    Give a full date. Incase a year is not present use: 2024, if month or date not available use the first day/month respectively. Date should be dd/mm/yyyy
+    Give a full date. Incase a year is not present use: {default_year}, 
+    if month {default_month}
+    date {default_day}
+    For time use {default_hour:02d}:{default_minute:02d}
+    . Date_time should be in the format dd/mm/yyyy hh:mm
     Please include nothing else in your response. If you can't find the information, return an empty list.:
-    """ + self.uploaded_content.content
+    """
+        return prompt + self.uploaded_content.content
 
 
