@@ -78,9 +78,20 @@ WSGI_APPLICATION = 'smartparent.wsgi.application'
 
 DBConfig = ConfigLoader().database_config
 DATABASES = {
-    'default': {
+    'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': DBConfig.DB_NAME,
+        'USER': DBConfig.DB_USER,
+        'PASSWORD': DBConfig.DB_PASSWORD,
+        'PORT': DBConfig.DB_PORT,
+        'HOST': DBConfig.DB_HOST,
+        'OPTIONS': {
+            'options': '-c search_path=django_schema,public'
+        },
     },
     'google_cloud': {
         'ENGINE': 'django.db.backends.postgresql',
