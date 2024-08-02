@@ -1,4 +1,4 @@
-from capture.models.local_firebase import FirebaseCache
+from capture.services.local_firebase import FirebaseCache
 from capture.services.integrations import FirebaseIntegration
 from smartparent.config import ConfigLoader
 from django.test import TestCase

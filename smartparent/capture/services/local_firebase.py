@@ -4,6 +4,9 @@ from pydantic import BaseModel
 from typing import Union
 
 class FirebaseCache(ICache):
+    """
+    A cache implementation that uses Firebase as the backend.
+    """
     def __init__(self):
         self.cache = {}
     

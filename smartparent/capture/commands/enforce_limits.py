@@ -1,5 +1,5 @@
 from smartparent.config import ConfigLoader
-from capture.models.local_firebase import FirebaseCache
+from capture.services.local_firebase import FirebaseCache
 from datetime import datetime
 
 class EnforceLimitsCommand():
