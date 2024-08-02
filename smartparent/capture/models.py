@@ -11,10 +11,10 @@ class CapturedEvent(models.Model):
     - source text
     - owner
     """
-    event_name = models.CharField(max_length=255)
-    event_description = models.TextField()
-    event_date_time = models.DateTimeField()
-    source_text = models.TextField()
+    name = models.CharField(max_length=255,default="Event name here")
+    description = models.TextField()
+    date_time = models.DateTimeField()
+    content_id = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

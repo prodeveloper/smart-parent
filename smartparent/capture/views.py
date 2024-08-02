@@ -8,6 +8,7 @@ from capture.data_types.uploaded import UploadedContent
 import asyncio
 import tempfile
 from capture.commands.enforce_limits import EnforceLimitsCommand
+from capture.events.capture_processed import CaptureProcessedEvent
 
 @login_required
 def index(request):
@@ -16,33 +17,36 @@ def index(request):
 @login_required
 def process_text_info(request):
     text = request.POST['text']
-    enforce_limits_command = EnforceLimitsCommand(text)
-    enforce_limits_command.run()
     content_id = md5(text.encode('utf-8')).hexdigest()
     capture_info = CaptureInfo(uploaded_content=UploadedContent(
         content_id=content_id, 
         content=text)
         )
     asyncio.run(capture_info.execute())
+    capture_processed_event = CaptureProcessedEvent(capture_info=capture_info, user=request.user)
+    asyncio.run(capture_processed_event.broadcast())
     events = capture_info.parsed_events
     return render(request, 'capture/event_details.html', {'events': events})
 
 
 @login_required
 def process_pdf_upload(request):
+    """
+    Process a PDF file upload and return the events to the user
+    """
     if request.method == 'POST' and request.FILES.get('pdf_file'):
         pdf_file = request.FILES['pdf_file']
-        
         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
             for chunk in pdf_file.chunks():
                 temp_file.write(chunk)
             temp_file_path = temp_file.name
 
-        enforce_limits_command = EnforceLimitsCommand(temp_file_path)
-        enforce_limits_command.run()
-
-        capture_info = CaptureInfoFromPdf(file_path=temp_file_path)
-        asyncio.run(capture_info.execute())
-        return render(request, 'capture/event_details.html', {'events': capture_info.parsed_events})
+        capture_info_from_pdf = CaptureInfoFromPdf(file_path=temp_file_path)
+        asyncio.run(capture_info_from_pdf.execute())
+        capture_processed_event = CaptureProcessedEvent(
+            capture_info=capture_info_from_pdf.captured_info,
+            user=request.user)
+        capture_processed_event.broadcast()
+        return render(request, 'capture/event_details.html', {'events': capture_info_from_pdf.parsed_events})
     else:
         return HttpResponse("No file uploaded")
