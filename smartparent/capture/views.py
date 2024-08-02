@@ -7,12 +7,22 @@ from capture.commands.capture_info_from_pdf import CaptureInfoFromPdf
 from capture.data_types.uploaded import UploadedContent
 import asyncio
 import tempfile
-from capture.commands.enforce_limits import EnforceLimitsCommand
+from capture.models import CapturedEvent
 from capture.events.capture_processed import CaptureProcessedEvent
 
 @login_required
 def index(request):
     return render(request, 'capture/index.html')
+
+@login_required
+def event_list(request):
+    events = CapturedEvent.objects.filter(owner=request.user)
+    return render(request, 'capture/event_list.html', {'events': events})
+
+@login_required
+def event_edit(request, event_id):
+    event = CapturedEvent.objects.get(id=event_id)
+    return render(request, 'capture/event_edit.html', {'event': event})
 
 @login_required
 def process_text_info(request):
