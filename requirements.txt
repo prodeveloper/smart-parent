@@ -106,3 +106,4 @@ cloud-sql-python-connector==1.11.0
 pg8000==1.31.2
 psycopg==3.2.1
 pexpect==4.9.0
+django-allauth==64.0.0
