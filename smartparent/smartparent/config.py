@@ -27,12 +27,26 @@ class ConfigLoader:
             'MAX_TEXT_LENGTH',
             'MAX_TIMES_PER_DAY'
         ])
+    sendgrid_config = namedtuple('SendgridConfig', [
+            'SENDGRID_API_KEY',
+            'SENDGRID_FROM',
+            'SENDGRID_SANDBOX_MODE_IN_DEBUG',
+            'SENDGRID_ECHO_TO_STDOUT'
+        ])
+    django_config = namedtuple('DjangoConfig', [
+            'DJANGO_SUPERUSER_USERNAME',
+            'DJANGO_SUPERUSER_EMAIL',
+            'DJANGO_SUPERUSER_PASSWORD',
+            'DJANGO_SECRET',
+            'DJANGO_DEBUG'
+        ])
 
     def __init__(self):
         self._db_configs()
         self._test_configs()
         self._throttle_configs()
-
+        self._sendgrid_configs()
+        self._django_superuser_configs()
     @property
     def configs(self):
         """Retrieve Gemini configuration, prioritizing environment variables."""
@@ -82,3 +96,17 @@ class ConfigLoader:
             setattr(self.throttle_config, field,
                     int(os.environ.get(field) or
                     config.get('THROTTLE', field, fallback=None)))
+    def _sendgrid_configs(self):
+        config = configparser.ConfigParser()
+        config.read('../config.ini')
+        for field in self.sendgrid_config._fields:
+            setattr(self.sendgrid_config, field,
+                    os.environ.get(field) or
+                    config.get('SENDGRID', field, fallback=None))
+    def _django_superuser_configs(self):
+        config = configparser.ConfigParser()
+        config.read('../config.ini')
+        for field in self.django_config._fields:
+            setattr(self.django_config, field,
+                    os.environ.get(field) or
+                    config.get('DJANGO_CONFIG', field, fallback=None))

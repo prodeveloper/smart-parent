@@ -21,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e8kn@*dx^t9pbf6+wc%bgb#ul7r7r*-#(jlm)s5xbib*63*qd7'
+SECRET_KEY = ConfigLoader().django_config.DJANGO_SECRET
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = ConfigLoader().django_config.DJANGO_DEBUG
 
 ALLOWED_HOSTS = ['smart-parent-7wv3ucm4xa-uc.a.run.app', 'localhost', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://smart-parent-7wv3ucm4xa-uc.a.run.app', 'http://localhost:8000', 'http://127.0.0.1:8000']
@@ -121,6 +121,11 @@ DATABASES = {
     }
 }
 
+#sendgrid
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = ConfigLoader().sendgrid_config.SENDGRID_API_KEY
+SENDGRID_SANDBOX_MODE_IN_DEBUG = ConfigLoader().sendgrid_config.SENDGRID_SANDBOX_MODE_IN_DEBUG
+SENDGRID_ECHO_TO_STDOUT = ConfigLoader().sendgrid_config.SENDGRID_ECHO_TO_STDOUT
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
