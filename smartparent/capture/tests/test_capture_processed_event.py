@@ -1,10 +1,10 @@
 from django.test import TestCase
-from capture.events.capture_processed import CaptureProcessedEvent
+from capture.events.capture_processed import CaptureProcessedEvent, EventDateParseError
 from django.contrib.auth.models import User
 from capture.commands.capture_info import CaptureInfo
 from capture.data_types.uploaded import UploadedContent
 from capture.models import CapturedEvent
-
+from capture.commands.log_item import LogItem
 
 class TestCaptureProcessedEvent(TestCase):
     def test_capture_processed_event(self):
@@ -29,3 +29,9 @@ class TestCaptureProcessedEvent(TestCase):
         self.assertEqual(saved_events[0].name, "test_event")
         self.assertEqual(saved_events[0].description, "test_description")
         self.assertEqual(saved_events[0].owner, user)
+    
+    def test_capture_processed_event_date_parse_error(self):
+        date_string = "not a date"
+        captured_event = CaptureProcessedEvent(capture_info=None, user=None)
+        with self.assertRaises(EventDateParseError):
+            captured_event._clean_date(date_string)

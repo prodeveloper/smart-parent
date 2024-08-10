@@ -3,7 +3,8 @@ from capture.commands.capture_info import CaptureInfo
 from capture.models import CapturedEvent
 from django.contrib.auth.models import User
 from django.utils import timezone
-
+from dateutil import parser
+from capture.commands.log_item import LogItem
 
 class CaptureProcessedEvent:
     """
@@ -34,16 +35,22 @@ class CaptureProcessedEvent:
 
     def _clean_date(self, date_string):
         try:
-            # Parse the input date string
-            date_obj = datetime.strptime(date_string, "%d/%m/%Y %H:%M")
+            # Attempt to parse the date string
+            date_obj = parser.parse(date_string)
+            # If year is not 4 digits, assume it's day/month/year format
+            if date_obj.year < 1000:
+                date_obj = parser.parse(date_string, dayfirst=True)
+            # Make the datetime aware
             aware_date = timezone.make_aware(date_obj, timezone.get_current_timezone())
-            # Format the date object to the required format
             return aware_date
-        except ValueError as e:
-            return f"Error: {str(e)}"
-
+        except ValueError as exc:
+            raise EventDateParseError(f"Error parsing date: {date_string}") from exc
     
 class CaptureEventAlreadyBroadcasted(Exception):
     """
     An exception to handle the case where a capture event has already been broadcasted.
+    """
+class EventDateParseError(Exception):
+    """
+    An exception if we can't parse the date of the event.
     """
