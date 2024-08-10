@@ -19,15 +19,20 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- ... existing navigation items ... -->
                 </ul>
+                {% if user.is_authenticated %}
                 <div class="d-flex">
+                    
                     <a href="{% url 'capture:index' %}" class="btn btn-primary me-2"><i class="bi bi-camera-fill"></i> Capture new event</a>
                     <a href="{% url 'capture:event_list' %}" class="btn btn-info me-2"><i class="bi bi-list-ul"></i> All Events</a>
                     {% if user.is_staff %}
                         <a href="{% url 'admin:index' %}" class="btn btn-secondary me-2"><i class="bi bi-gear-fill"></i> Admin</a>
                     {% endif %}
                 </div>
-                {% if user.is_authenticated %}
+                
                     <a href="{% url 'account_logout' %}" class="btn btn-outline-danger ms-2"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                {% endif %}
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'account_login' %}" class="btn btn-outline-primary ms-2"><i class="bi bi-box-arrow-right"></i> Login</a>
                 {% endif %}
             </div>
         </div>
